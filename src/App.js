@@ -1,31 +1,38 @@
 import React, { Component } from 'react'
-import logo from './logo.svg'
-import './App.css'
 
-const Book = (props) => (
-  <div>
-    Current book: {props.book.name}
-  </div>
+const Book = ({ book }) => (
+    <div>Current book: {book.name} </div>
 )
 
 class App extends Component {
   constructor() {
     super()
     this.state = {
-      book: { name: 'ulysses' } }
+      book: { name: 'ulysses' },
+      hasError: false
+    }
+  }
+
+  componentDidCatch() {
+    this.setState({ hasError: true })
   }
 
   updateBook = () => {
-    this.setState({ book: null})
+    this.setState({ book: null })
   }
 
   render() {
-    return (
-      <div className="App">
-        <Book book={this.state.book} />
-        <button onClick={this.updateBook}>Update</button>
-      </div>
-    );
+      if (this.state.hasError) {
+        return <div>Oh no, something went wrong!</div>
+      } else {
+        return (
+          <div style={{textAlign: 'center'}}>
+            <Book book={this.state.book} />
+            <button onClick={this.updateBook}>Update</button>
+          </div>
+        )
+      }
+
   }
 }
 
