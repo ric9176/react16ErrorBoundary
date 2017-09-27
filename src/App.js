@@ -13,11 +13,15 @@ class App extends Component {
     }
   }
 
-  componentDidCatch() {
+  componentDidCatch(error, info) {
+    console.log('error --->', error)
+    console.log('info --->', info)
     this.setState({ hasError: true })
   }
 
   updateBook = () => {
+    // In react 16^ the whole component will unmount the whole component tree meaning it'll disapear from user perspective
+    // this behaviour has changed based on react team view that it's worse to leave corrupted UI in place than remove it totally
     this.setState({ book: null })
   }
 
