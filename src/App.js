@@ -1,5 +1,27 @@
 import React, { Component } from 'react'
 
+class ErrorBoundary extends Component {
+  constructor() {
+    super()
+    this.state = {
+      hasError: false
+    }
+  }
+
+  componentDidCatch(error, info) {
+    this.setState({ hasError: true })
+    // sendToErrorReportingService(error, info)
+  }
+
+  render () {
+    if (this.state.hasError) {
+      return <div>Oh no, something went wrong!</div>
+    } else {
+      return this.props.children
+    }
+  }
+}
+
 const Book = ({ book }) => (
     <div>Current book: {book.name} </div>
 )
@@ -14,8 +36,6 @@ class App extends Component {
   }
 
   componentDidCatch(error, info) {
-    console.log('error --->', error)
-    console.log('info --->', info)
     this.setState({ hasError: true })
   }
 
@@ -26,18 +46,16 @@ class App extends Component {
   }
 
   render() {
-      if (this.state.hasError) {
-        return <div>Oh no, something went wrong!</div>
-      } else {
         return (
           <div style={{textAlign: 'center'}}>
-            <Book book={this.state.book} />
-            <button onClick={this.updateBook}>Update</button>
+            <ErrorBoundary>
+              <Book book={this.state.book} />
+              <button onClick={this.updateBook}>Update</button>
+            </ErrorBoundary>
           </div>
         )
       }
 
-  }
 }
 
-export default App;
+export default App
